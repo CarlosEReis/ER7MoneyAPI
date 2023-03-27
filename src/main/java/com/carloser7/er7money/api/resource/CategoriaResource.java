@@ -2,6 +2,7 @@ package com.carloser7.er7money.api.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,11 @@ public class CategoriaResource {
 	}
 	
 	@GetMapping("/{codigo}")
-	public Categoria buscarPeloCodigo(@PathVariable Long codigo) {
-		return this.categoriaRepository.findById(codigo).orElse(null);
+	public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo) {
+		Optional<Categoria> categoria = this.categoriaRepository.findById(codigo);
+		
+		return categoria.isPresent() ? 
+				ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
 	}
 	
 	// É uma boa prática retornar o status code 200 mesmo se o retorno do rescurso em questão estiver vazio.
