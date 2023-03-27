@@ -17,9 +17,9 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
+	// É uma boa prática retornar o status code 200 mesmo se o retorno do rescurso em questão estiver vazio.
 	@GetMapping
 	public List<Categoria> Listar() {
 		return this.categoriaRepository.findAll();
-	}
-	
+	}	
 }
