@@ -48,15 +48,14 @@ public class Er7MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private List<Erro> criaListaDeErros(BindingResult bindingResult) {
 		
-		ArrayList<Erro> erros = new ArrayList<>();
+		List<Erro> erros = new ArrayList<>();
 		
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
 			String msgUsuario = this.messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
 			String msgDesenvolvedor = fieldError.toString();
-			Erro erro = new Erro(msgUsuario, msgDesenvolvedor);
-			erros.add(erro);
+			erros.add(new Erro(msgUsuario, msgDesenvolvedor));
 		}
-		
+
 		return erros;
 	}
 	
