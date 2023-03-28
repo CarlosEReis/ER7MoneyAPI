@@ -58,6 +58,8 @@ public class PessoaResource {
 		return this.pessoaRepository.findAll();
 	}
 	
+	// Falando um pouco sobre atualização de recursos em REST
+	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo ) {
