@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -14,9 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Repository
+@Entity
 @Table(name = "lancamento")
 public class Lancamento {
 
@@ -27,9 +28,11 @@ public class Lancamento {
 	private String descricao;
 
 	@Column(name = "data_vencimento")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataVencimento;
 
 	@Column(name = "data_pagamento")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataPagamento;
 
 	private BigDecimal valor;
