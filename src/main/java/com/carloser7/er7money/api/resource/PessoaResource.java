@@ -7,10 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.carloser7.er7money.api.event.RecursoCriadoEvent;
 import com.carloser7.er7money.api.model.Pessoa;
 import com.carloser7.er7money.api.repository.PessoaRepository;
+import com.carloser7.er7money.api.service.PessoaService;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -36,6 +35,9 @@ public class PessoaResource {
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private PessoaService pessoaService;
 	
 	@PostMapping
 	@NotNull
@@ -64,13 +66,16 @@ public class PessoaResource {
 	@PutMapping("/{codigo}")
 	public Pessoa atualiar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
 		
-		Pessoa pessoaSalva = this.pessoaRepository
-				.findById(codigo)
-				.orElseThrow(() -> new EmptyResultDataAccessException(1));
-		
-		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
-		return this.pessoaRepository.save(pessoaSalva);
+		Pessoa pessoaAtualizada = this.pessoaService.atualizar(codigo, pessoa);
+		return pessoaAtualizada;
 	}
+	
+	@PutMapping("/{codigo}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+		this.pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
+	}
+	
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
