@@ -25,6 +25,7 @@ import com.carloser7.er7money.api.event.RecursoCriadoEvent;
 import com.carloser7.er7money.api.exceptionhandler.Er7MoneyExceptionHandler.Erro;
 import com.carloser7.er7money.api.model.Lancamento;
 import com.carloser7.er7money.api.repository.LancamentoRepository;
+import com.carloser7.er7money.api.repository.filter.LancamentoFilter;
 import com.carloser7.er7money.api.service.LancamentoService;
 import com.carloser7.er7money.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -61,8 +62,8 @@ public class LancamentoReource {
 	}
 	
 	@GetMapping
-	public List<Lancamento> listar() {
-		return this.lancamentoRepository.findAll();
+	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+		return this.lancamentoRepository.filtrar(lancamentoFilter);
 	}
 	
 	@ExceptionHandler({PessoaInexistenteOuInativaException.class})
