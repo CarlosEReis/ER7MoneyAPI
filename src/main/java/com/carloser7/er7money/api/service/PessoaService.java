@@ -2,11 +2,11 @@ package com.carloser7.er7money.api.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.carloser7.er7money.api.model.Pessoa;
 import com.carloser7.er7money.api.repository.PessoaRepository;
+import com.carloser7.er7money.api.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
 public class PessoaService {
@@ -22,10 +22,10 @@ public class PessoaService {
 		return this.pessoaRepository.save(pessoaSalva);
 	}
 
-	private Pessoa buscarPessoaPeloCodigo(Long codigo) {
+	protected Pessoa buscarPessoaPeloCodigo(Long codigo) {
 		Pessoa pessoaSalva = this.pessoaRepository
 				.findById(codigo)
-				.orElseThrow(() -> new EmptyResultDataAccessException(1));
+				.orElseThrow(() -> new PessoaInexistenteOuInativaException());
 		return pessoaSalva;
 	}
 
