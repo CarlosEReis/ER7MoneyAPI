@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +51,6 @@ public class LancamentoResource {
 	
 	@PostMapping
 	public ResponseEntity<Lancamento> criar(@RequestBody @Valid Lancamento lancamento, HttpServletResponse reponse) {
-		
 		Lancamento lancamentoSalvo = this.lancamentoService.salvar(lancamento);
 		this.publisher.publishEvent(new RecursoCriadoEvent(this, reponse, lancamentoSalvo.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
@@ -57,15 +58,14 @@ public class LancamentoResource {
 	
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Lancamento> buscarPeloCodigo(@PathVariable Long codigo) {
-		
 		Optional<Lancamento> lancamento = this.lancamentoRepository.findById(codigo);
 		return lancamento.isPresent() ?
-				ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
+			ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
 	}
 	
 	@GetMapping
-	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-		return this.lancamentoRepository.filtrar(lancamentoFilter);
+	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return this.lancamentoRepository.filtrar(lancamentoFilter, pageable);
 	}
 	
 	@DeleteMapping("/{codigo}")
@@ -76,10 +76,8 @@ public class LancamentoResource {
 	
 	@ExceptionHandler({PessoaInexistenteOuInativaException.class})
 	public ResponseEntity<Object> handlerPessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex) {
-		
 		String mensagemUsuario = this.messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.toString();
-		
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return ResponseEntity.badRequest().body(erros);
 	}
