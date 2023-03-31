@@ -34,4 +34,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable();
 	}
 	
+	// Entendendo o OAuth e conhecendo o fluxo que de será aplicado na API do curso (Resource Owner Password Flow).
 }
