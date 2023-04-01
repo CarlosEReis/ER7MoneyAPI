@@ -56,4 +56,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public TokenStore tokenStore() {
 		return new InMemoryTokenStore();
 	}
+	
+	// Conhecendo um pouco sobre JWT (Json Web Token)
 }
