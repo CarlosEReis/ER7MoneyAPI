@@ -52,5 +52,7 @@ public class CategoriaResource {
 	@GetMapping
 	public List<Categoria> Listar() {
 		return this.categoriaRepository.findAll();
-	}	
+	}
+	
+	// Conhecendo um pocuo sobre CORS
 }
