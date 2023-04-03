@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.carloser7.er7money.api.event.RecursoCriadoEvent;
 import com.carloser7.er7money.api.exceptionhandler.Er7MoneyExceptionHandler.Erro;
 import com.carloser7.er7money.api.model.Lancamento;
+import com.carloser7.er7money.api.projection.ResumoLancamento;
 import com.carloser7.er7money.api.repository.LancamentoRepository;
 import com.carloser7.er7money.api.repository.filter.LancamentoFilter;
 import com.carloser7.er7money.api.service.LancamentoService;
@@ -70,6 +71,12 @@ public class LancamentoResource {
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
 	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		return this.lancamentoRepository.filtrar(lancamentoFilter, pageable);
+	}
+
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
+	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return this.lancamentoRepository.resumir(lancamentoFilter, pageable);
 	}
 	
 	@DeleteMapping("/{codigo}")
