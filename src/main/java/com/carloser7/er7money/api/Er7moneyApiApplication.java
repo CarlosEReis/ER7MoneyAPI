@@ -10,4 +10,5 @@ public class Er7moneyApiApplication {
 		SpringApplication.run(Er7moneyApiApplication.class, args);
 	}
 	// Criando a conta no Heroku
+	// Deploy realizado com sucesso
 }
