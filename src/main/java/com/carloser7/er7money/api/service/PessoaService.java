@@ -35,4 +35,10 @@ public class PessoaService {
 		this.pessoaRepository.save(pessoa);
 	}
 	
+	public void validaPessoa(Pessoa pessoa) {
+		Pessoa pessoaLancamentoAtual = buscarPessoaPeloCodigo(pessoa.getCodigo());
+		if (pessoaLancamentoAtual.isInativo()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+	}
 }
