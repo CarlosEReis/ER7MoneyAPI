@@ -23,6 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.carloser7.er7money.api.service.exception.CategoriaInexistenteException;
+import com.carloser7.er7money.api.service.exception.PessoaInexistenteOuInativaException;
 import com.carloser7.er7money.api.service.exception.RecursoInexistenteException;
 
 @ControllerAdvice
@@ -53,8 +54,11 @@ public class Er7MoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
-	
-	@ExceptionHandler({EmptyResultDataAccessException.class, RecursoInexistenteException.class, CategoriaInexistenteException.class})
+	@ExceptionHandler({
+		EmptyResultDataAccessException.class, 
+		RecursoInexistenteException.class, 
+		CategoriaInexistenteException.class,
+		PessoaInexistenteOuInativaException.class})
 	public ResponseEntity<Object> handlerEmptyResultDataAccessException(RuntimeException ex, WebRequest request) {
 		
 		String mensagemUsuario = this.messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
