@@ -71,7 +71,7 @@ public class LancamentoResource {
 	}
 	
 	@PutMapping("/{codigo}")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRO_LANCAMENTO') and hasAuthority('SCOPE_write')")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and hasAuthority('SCOPE_write')")
 	public Lancamento atualizar(@PathVariable Long codigo, @RequestBody Lancamento lancamento) {
 		Lancamento lancamentoAtualizado = this.lancamentoService.atualizar(codigo, lancamento);
 		
