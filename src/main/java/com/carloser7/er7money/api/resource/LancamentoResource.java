@@ -1,5 +1,7 @@
 package com.carloser7.er7money.api.resource;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.carloser7.er7money.api.dto.LancamentoEstatisticaCategoria;
 import com.carloser7.er7money.api.event.RecursoCriadoEvent;
 import com.carloser7.er7money.api.model.Lancamento;
 import com.carloser7.er7money.api.projection.ResumoLancamento;
@@ -74,7 +77,6 @@ public class LancamentoResource {
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and hasAuthority('SCOPE_write')")
 	public Lancamento atualizar(@PathVariable Long codigo, @RequestBody Lancamento lancamento) {
 		Lancamento lancamentoAtualizado = this.lancamentoService.atualizar(codigo, lancamento);
-		
 		return lancamentoAtualizado;
 	}
 	
@@ -83,6 +85,12 @@ public class LancamentoResource {
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and hasAuthority('SCOPE_write')")
 	public void remover(@PathVariable Long codigo) {
 		this.lancamentoRepository.deleteById(codigo);
+	}
+	
+	@GetMapping("/estatistica/por-categoria")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
+	public List<LancamentoEstatisticaCategoria> porCategoria() {
+		return this.lancamentoRepository.porCategoria(LocalDate.now());
 	}
 	
 }
