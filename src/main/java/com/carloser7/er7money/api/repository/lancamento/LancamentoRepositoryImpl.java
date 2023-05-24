@@ -19,6 +19,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaCategoria;
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaDia;
+import com.carloser7.er7money.api.dto.LancamentoEstatisticaPessoa;
 import com.carloser7.er7money.api.model.Categoria_;
 import com.carloser7.er7money.api.model.Lancamento;
 import com.carloser7.er7money.api.model.Lancamento_;
@@ -175,10 +176,38 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 		);
 		
 		criteria.groupBy(
-			root.get(Lancamento_.CATEGORIA),
-			root.get(Lancamento_.CATEGORIA)
+			root.get(Lancamento_.TIPO),
+			root.get(Lancamento_.DATA_VENCIMENTO)
 		);
 		TypedQuery<LancamentoEstatisticaDia> createQuery = manager.createQuery(criteria);
+		return createQuery.getResultList();
+	}
+	
+	@Override
+	public List<LancamentoEstatisticaPessoa> porPessoa(LocalDate inicio, LocalDate fim) {
+		CriteriaBuilder builder = this.manager.getCriteriaBuilder();
+		CriteriaQuery<LancamentoEstatisticaPessoa> criteria = builder.createQuery(LancamentoEstatisticaPessoa.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		criteria.select(
+			builder.construct(
+				LancamentoEstatisticaPessoa.class,
+				root.get(Lancamento_.TIPO),
+				root.get(Lancamento_.PESSOA),
+				builder.sum(root.get(Lancamento_.VALOR)))
+		);
+		
+		criteria.where(
+			builder.greaterThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), inicio),
+			builder.lessThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), fim)
+		);
+		
+		criteria.groupBy(
+			root.get(Lancamento_.TIPO),
+			root.get(Lancamento_.PESSOA)
+		);
+		
+		TypedQuery<LancamentoEstatisticaPessoa> createQuery = manager.createQuery(criteria);
 		return createQuery.getResultList();
 	}
 }
