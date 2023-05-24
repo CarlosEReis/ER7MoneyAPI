@@ -1,5 +1,6 @@
 package com.carloser7.er7money.api.repository.lancamento;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
+import com.carloser7.er7money.api.dto.LancamentoEstatisticaCategoria;
 import com.carloser7.er7money.api.model.Categoria_;
 import com.carloser7.er7money.api.model.Lancamento;
 import com.carloser7.er7money.api.model.Lancamento_;
@@ -119,6 +121,35 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 		
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
+	}
+
+	@Override
+	public List<LancamentoEstatisticaCategoria> porCategoria(LocalDate mesReferencia) {
+		
+		CriteriaBuilder builder = this.manager.getCriteriaBuilder();
+		CriteriaQuery<LancamentoEstatisticaCategoria> criteria = builder.createQuery(LancamentoEstatisticaCategoria.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		criteria.select(
+			builder.construct(
+				LancamentoEstatisticaCategoria.class,
+				root.get(Lancamento_.categoria),
+				builder.sum(root.get(Lancamento_.valor))
+			)
+		);
+		
+		LocalDate primeiroDia = mesReferencia.withDayOfMonth(1);
+		LocalDate ultimoDia = mesReferencia.withDayOfMonth(mesReferencia.lengthOfMonth());
+		
+		criteria.where(
+			builder.greaterThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), primeiroDia),
+			builder.lessThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), ultimoDia)
+		);
+		
+		criteria.groupBy(root.get(Lancamento_.categoria));
+		TypedQuery<LancamentoEstatisticaCategoria> createQuery = manager.createQuery(criteria);
+		
+		return createQuery.getResultList();
 	}
 
 }
