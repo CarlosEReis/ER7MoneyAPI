@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaCategoria;
+import com.carloser7.er7money.api.dto.LancamentoEstatisticaDia;
 import com.carloser7.er7money.api.event.RecursoCriadoEvent;
 import com.carloser7.er7money.api.model.Lancamento;
 import com.carloser7.er7money.api.projection.ResumoLancamento;
@@ -93,4 +94,9 @@ public class LancamentoResource {
 		return this.lancamentoRepository.porCategoria(LocalDate.now());
 	}
 	
+	@GetMapping("/estatistica/por-dia")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")
+	public List<LancamentoEstatisticaDia> porDia() {
+		return this.lancamentoRepository.porDia(LocalDate.now());
+	}
 }
