@@ -195,16 +195,15 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 				root.get(Lancamento_.TIPO),
 				root.get(Lancamento_.PESSOA),
 				builder.sum(root.get(Lancamento_.VALOR)))
-		);
-		
-		criteria.where(
+		).where(
 			builder.greaterThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), inicio),
 			builder.lessThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), fim)
-		);
-		
-		criteria.groupBy(
+		).groupBy(
 			root.get(Lancamento_.TIPO),
 			root.get(Lancamento_.PESSOA)
+		).orderBy(
+			builder.asc(root.get(Lancamento_.PESSOA)),
+			builder.asc(root.get(Lancamento_.TIPO))
 		);
 		
 		TypedQuery<LancamentoEstatisticaPessoa> createQuery = manager.createQuery(criteria);

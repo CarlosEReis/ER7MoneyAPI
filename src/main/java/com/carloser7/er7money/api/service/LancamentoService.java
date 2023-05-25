@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -48,15 +50,16 @@ public class LancamentoService {
 		return this.lancamentoRepository.save(lancamentoBanco);
 	}
 
-	public byte[] relatoriaPorPessoa(LocalDate inicio, LocalDate fim) throws Exception {
+	public byte[] relatorioPorPessoa(LocalDate inicio, LocalDate fim) throws Exception {
 		List<LancamentoEstatisticaPessoa> dados = this.lancamentoRepository.porPessoa(inicio, fim);
 		
-		HashMap<String, Object> parametros = new HashMap<>();
+		Map<String, Object> parametros = new HashMap<>();
 		parametros.put("DT_INICIAL", Date.valueOf(inicio));
 		parametros.put("DT_FINAL", Date.valueOf(fim));
+		parametros.put("REPORT_LOCALE", new Locale("pt", "BR"));
 		
 		InputStream inputStream = this.getClass().getResourceAsStream("/relatorios/lancamentos-por-pessoa-01.jasper");
-		JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, new  JRBeanCollectionDataSource(dados));
+		JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, new JRBeanCollectionDataSource(dados));
 		
 		return JasperExportManager.exportReportToPdf(jasperPrint);
 	}
