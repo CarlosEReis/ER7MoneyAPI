@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaPessoa;
@@ -62,6 +63,11 @@ public class LancamentoService {
 		JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, new JRBeanCollectionDataSource(dados));
 		
 		return JasperExportManager.exportReportToPdf(jasperPrint);
+	}
+	
+	@Scheduled(cron = "0 0 6 * * *")
+	public void scheduler() {
+		System.out.println("\n>>>>>>>>>>>>>>>>>> Método sendo executado <<<<<<<<<<<<<<<<<<<<<\n\n");
 	}
 	
 	private Lancamento buscaLancamento(Long codigo) {
