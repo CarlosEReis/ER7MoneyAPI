@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Er7moneyApiProperty {
 
-	private String origemPermitida = "http://localhost:8000";
-
 	private final Seguranca seguranca = new Seguranca();
 
 	private final Mail mail = new Mail();
@@ -21,17 +19,10 @@ public class Er7moneyApiProperty {
 		return seguranca;
 	}
 
-	public String getOrigemPermitida() {
-		return origemPermitida;
-	}
-
-	public void setOrigemPermitida(String originPermitida) {
-		this.origemPermitida = originPermitida;
-	}
-
 	public static class Seguranca {
-		
+
 		private boolean enablehttps;
+		private String origemPermitida = "http://localhost:8000";;
 
 		public boolean isEnablehttps() {
 			return enablehttps;
@@ -39,6 +30,14 @@ public class Er7moneyApiProperty {
 
 		public void setEnablehttps(boolean enablehttps) {
 			this.enablehttps = enablehttps;
+		}
+
+		public String getOrigemPermitida() {
+			return origemPermitida;
+		}
+
+		public void setOrigemPermitida(String origemPermitida) {
+			this.origemPermitida = origemPermitida;
 		}
 
 	}
