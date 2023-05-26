@@ -21,15 +21,15 @@ public class Er7moneyApiProperty {
 
 	public static class Seguranca {
 
-		private boolean enablehttps;
+		private boolean enableHttps;
 		private String origemPermitida = "http://localhost:8000";;
 
-		public boolean isEnablehttps() {
-			return enablehttps;
+		public boolean isEnableHttps() {
+			return enableHttps;
 		}
-
-		public void setEnablehttps(boolean enablehttps) {
-			this.enablehttps = enablehttps;
+		
+		public void setEnableHttps(boolean enableHttps) {
+			this.enableHttps = enableHttps;
 		}
 
 		public String getOrigemPermitida() {

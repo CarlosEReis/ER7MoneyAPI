@@ -23,7 +23,7 @@ public class TokenResource {
 	public void revoke(HttpServletRequest request, HttpServletResponse response) {
 		Cookie cookie = new Cookie("refreshToken", null);
 		cookie.setHttpOnly(true);
-		cookie.setSecure(this.er7moneyApiProperty.getSeguranca().isEnablehttps());
+		cookie.setSecure(this.er7moneyApiProperty.getSeguranca().isEnableHttps());
 		cookie.setPath(request.getContextPath() + "/oauth/token");
 		cookie.setMaxAge(0);
 		
