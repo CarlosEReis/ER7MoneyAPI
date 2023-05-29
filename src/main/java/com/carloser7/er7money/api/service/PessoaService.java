@@ -21,8 +21,12 @@ public class PessoaService {
 	
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
 		Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
-		pessoa.getContatos().forEach(c -> c.setPessoa(pessoa));
-		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+		
+		pessoaSalva.getContatos().clear();
+		pessoaSalva.getContatos().addAll(pessoa.getContatos());
+		pessoaSalva.getContatos().forEach(c -> c.setPessoa(pessoaSalva));
+		
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo", "contatos");
 		pessoaSalva.setAtivo(pessoa.isAtivo()); // Forçando o setAtivo, pois o método acima COPYPROPERTIES não trabalha com a classe wrapper Boolean.
 
 		return this.pessoaRepository.save(pessoaSalva);
