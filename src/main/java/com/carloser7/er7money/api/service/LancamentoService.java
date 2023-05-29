@@ -15,8 +15,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaPessoa;
+import com.carloser7.er7money.api.mail.Mailer;
 import com.carloser7.er7money.api.model.Lancamento;
+import com.carloser7.er7money.api.model.Usuario;
 import com.carloser7.er7money.api.repository.LancamentoRepository;
+import com.carloser7.er7money.api.repository.UsuarioRepository;
 import com.carloser7.er7money.api.service.exception.RecursoInexistenteException;
 
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -26,6 +29,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class LancamentoService {
+	
+	private static final String DESTINATARIOS = "ROLE_PESQUISAR_LANCAMENTO";
 
 	@Autowired
 	private PessoaService pessoaService;
@@ -34,7 +39,13 @@ public class LancamentoService {
 	private LancamentoRepository lancamentoRepository;
 	
 	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
 	private CategoriaService categoriaService;
+	
+	@Autowired
+	private Mailer mailer;
 	
 	public Lancamento salvar(Lancamento lancamento) {
 		this.pessoaService.validaPessoa(lancamento.getPessoa());
@@ -65,9 +76,13 @@ public class LancamentoService {
 		return JasperExportManager.exportReportToPdf(jasperPrint);
 	}
 	
-	@Scheduled(cron = "0 0 6 * * *")
+  	@Scheduled(cron = "0 0 6 * * *")
+	//@Scheduled(fixedDelay = 1000 * 60 * 30)
 	public void scheduler() {
-		System.out.println("\n>>>>>>>>>>>>>>>>>> Método sendo executado <<<<<<<<<<<<<<<<<<<<<\n\n");
+		List<Lancamento> lancamentos = this.lancamentoRepository.findByDataVencimentoLessThanEqualAndDataPagamentoIsNull(LocalDate.now());
+		List<Usuario> usuarios = this.usuarioRepository.findByPermissoesDescricao(DESTINATARIOS);
+		
+		this.mailer.avisarSobreLancamentosVencidos(lancamentos, usuarios);
 	}
 	
 	private Lancamento buscaLancamento(Long codigo) {
