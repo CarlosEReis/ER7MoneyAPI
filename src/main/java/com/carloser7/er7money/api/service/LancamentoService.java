@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +33,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class LancamentoService {
 	
 	private static final String DESTINATARIOS = "ROLE_PESQUISAR_LANCAMENTO";
+	private static final Logger logger = LoggerFactory.getLogger(LancamentoService.class);
 
 	@Autowired
 	private PessoaService pessoaService;
@@ -46,7 +49,7 @@ public class LancamentoService {
 	
 	@Autowired
 	private Mailer mailer;
-	
+		
 	public Lancamento salvar(Lancamento lancamento) {
 		this.pessoaService.validaPessoa(lancamento.getPessoa());
 		return this.lancamentoRepository.save(lancamento);
@@ -79,11 +82,24 @@ public class LancamentoService {
   	@Scheduled(cron = "0 0 6 * * *")
 	//@Scheduled(fixedDelay = 1000 * 60 * 30)
 	public void scheduler() {
-		List<Lancamento> lancamentos = this.lancamentoRepository.findByDataVencimentoLessThanEqualAndDataPagamentoIsNull(LocalDate.now());
-		List<Usuario> usuarios = this.usuarioRepository.findByPermissoesDescricao(DESTINATARIOS);
+  		if (logger.isDebugEnabled()) logger.debug("\nPreparando envio de e-mails de aviso de lançamentos vencidos.\n");
 		
-		this.mailer.avisarSobreLancamentosVencidos(lancamentos, usuarios);
-	}
+		List<Lancamento> lancamentosVencidos = this.lancamentoRepository.findByDataVencimentoLessThanEqualAndDataPagamentoIsNull(LocalDate.now());
+		if ( lancamentosVencidos.isEmpty()) {
+			logger.info("\nSem lançamentos vencidos para aviso.\n");
+			return;
+		}
+		logger.info("\nExistem {} lançamentos vencidos.\n", lancamentosVencidos.size());
+		
+		List<Usuario> destinatarios= this.usuarioRepository.findByPermissoesDescricao(DESTINATARIOS);
+		if (destinatarios.isEmpty()) {
+			logger.warn("\nExistem lançamentos vencidos, mas o sistema não encontrou destinarários.\n");
+			return;
+		}
+		
+		this.mailer.avisarSobreLancamentosVencidos(lancamentosVencidos, destinatarios);
+		logger.info("\nEnvio de e-mail de aviso concluído.\n");
+  	}
 	
 	private Lancamento buscaLancamento(Long codigo) {
 		Optional<Lancamento> lancamento = this.lancamentoRepository.findById(codigo);
