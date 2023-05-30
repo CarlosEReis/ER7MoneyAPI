@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 public class Er7moneyApiProperty {
 
 	private final Seguranca seguranca = new Seguranca();
-
 	private final Mail mail = new Mail();
-
 	private final S3 s3 = new S3();
 	
 	public Seguranca getSeguranca() {
@@ -95,6 +93,7 @@ public class Er7moneyApiProperty {
 
 		private String accessKeyId;
 		private String secretAccessKey;
+		private String bucketPrefix = "er7money-arquivos";
 
 		public String getAccessKeyId() {
 			return accessKeyId;
@@ -110,6 +109,10 @@ public class Er7moneyApiProperty {
 
 		public void setSecretAccessKey(String secretAccessKey) {
 			this.secretAccessKey = secretAccessKey;
+		}
+		
+		public String getBucketPrefix() {
+			return bucketPrefix;
 		}
 
 	}
