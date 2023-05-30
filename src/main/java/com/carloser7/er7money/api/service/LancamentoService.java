@@ -71,6 +71,12 @@ public class LancamentoService {
 		this.pessoaService.validaPessoa(lancamento.getPessoa());
 		this.categoriaService.validaCategoria(lancamento.getCategoria());
 		
+		if (StringUtils.isEmpty(lancamento.getAnexo()) && StringUtils.hasText(lancamentoBanco.getAnexo())) {
+			this.s3.remover(lancamentoBanco.getAnexo());
+		} else if (StringUtils.hasText(lancamento.getAnexo()) && lancamento.getAnexo().equals(lancamentoBanco.getAnexo())) {
+			this.s3.substituir(lancamentoBanco.getAnexo(), lancamento.getAnexo());
+		}
+		
 		BeanUtils.copyProperties(lancamento, lancamentoBanco, "codigo");
 		return this.lancamentoRepository.save(lancamentoBanco);
 	}
