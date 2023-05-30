@@ -2,6 +2,7 @@ package com.carloser7.er7money.api.storage;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.ObjectTagging;
 import com.amazonaws.services.s3.model.Permission;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.SetObjectTaggingRequest;
 import com.amazonaws.services.s3.model.Tag;
 import com.carloser7.er7money.api.property.Er7moneyApiProperty;
 
@@ -69,8 +71,19 @@ public class S3 {
 		return "\\\\"+this.apiProperty.getS3().getBucketPrefix() + ".s3.amazonaws.com/" + objeto;
 	}
 
+	public void salvar(String objeto) {
+		SetObjectTaggingRequest setObjectTaggingRequest = new SetObjectTaggingRequest(
+			apiProperty.getS3().getBucketPrefix(),
+			objeto,
+			new ObjectTagging(Collections.emptyList()));
+		
+		this.amazonS3.setObjectTagging(setObjectTaggingRequest);
+	}
+	
 	private String gerarNomeUnico(String originalFilename) {
 		return UUID.randomUUID().toString() + "_" + originalFilename;
 	}
+
+
 	
 }

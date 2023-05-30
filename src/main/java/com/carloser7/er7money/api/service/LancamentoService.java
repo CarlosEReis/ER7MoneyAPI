@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaPessoa;
 import com.carloser7.er7money.api.mail.Mailer;
@@ -23,6 +24,7 @@ import com.carloser7.er7money.api.model.Usuario;
 import com.carloser7.er7money.api.repository.LancamentoRepository;
 import com.carloser7.er7money.api.repository.UsuarioRepository;
 import com.carloser7.er7money.api.service.exception.RecursoInexistenteException;
+import com.carloser7.er7money.api.storage.S3;
 
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -50,8 +52,16 @@ public class LancamentoService {
 	@Autowired
 	private Mailer mailer;
 		
+	@Autowired
+	private S3 s3;
+	
 	public Lancamento salvar(Lancamento lancamento) {
 		this.pessoaService.validaPessoa(lancamento.getPessoa());
+		
+		if (StringUtils.hasText(lancamento.getAnexo())) {
+			s3.salvar(lancamento.getAnexo());
+		}
+		
 		return this.lancamentoRepository.save(lancamento);
 	}
 

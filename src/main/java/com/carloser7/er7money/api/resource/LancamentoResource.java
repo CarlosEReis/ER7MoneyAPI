@@ -98,9 +98,9 @@ public class LancamentoResource {
 	public void remover(@PathVariable Long codigo) {
 		this.lancamentoRepository.deleteById(codigo);
 	}
-
 	
 	@PostMapping("/anexo")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and hasAuthority('SCOPE_write')")
 	public Anexo uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
 		String nome = this.s3.salvarTemporariamente(anexo);
 		return new Anexo(nome, this.s3.configurarUrl(nome));
