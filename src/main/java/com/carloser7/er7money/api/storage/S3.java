@@ -40,25 +40,33 @@ public class S3 {
 		objectMetadata.setContentLength(arquivo.getSize());
 		
 		String nomeUnico = gerarNomeUnico(arquivo.getOriginalFilename());
+		
 		try {
 			PutObjectRequest putObjectRequest = new PutObjectRequest(
-				this.apiProperty.getS3().getBucketPrefix(),
-				nomeUnico,
-				arquivo.getInputStream(),
-				objectMetadata)
-			.withAccessControlList(acl);
+					apiProperty.getS3().getBucketPrefix(),
+					nomeUnico,
+					arquivo.getInputStream(), 
+					objectMetadata)
+					.withAccessControlList(acl);
 			
-			putObjectRequest.setTagging(new ObjectTagging(Arrays.asList(new Tag("expirar", "true"))));
+			putObjectRequest.setTagging(new ObjectTagging(
+					Arrays.asList(new Tag("expirar", "true"))));
+			
 			amazonS3.putObject(putObjectRequest);
 			
-			if(logger.isDebugEnabled()) {
-				logger.debug("\nArquivo {} enviado com sucesso para o S3.\n", nomeUnico);
-			};
+			if (logger.isDebugEnabled()) {
+				logger.debug("Arquivo {} enviado com sucesso para o S3.", 
+						arquivo.getOriginalFilename());
+			}
 			
 			return nomeUnico;
 		} catch (IOException e) {
-			throw new RuntimeException("Problema ao tentar enviar o arquivos para o S3.", e);
+			throw new RuntimeException("Problemas ao tentar enviar o arquivo para o S3.", e);
 		}
+	}
+	
+	public String configurarUrl(String objeto) {
+		return "\\\\"+this.apiProperty.getS3().getBucketPrefix() + ".s3.amazonaws.com/" + objeto;
 	}
 
 	private String gerarNomeUnico(String originalFilename) {

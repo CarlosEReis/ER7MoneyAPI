@@ -1,10 +1,7 @@
 package com.carloser7.er7money.api.resource;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.carloser7.er7money.api.dto.Anexo;
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaCategoria;
 import com.carloser7.er7money.api.dto.LancamentoEstatisticaDia;
 import com.carloser7.er7money.api.event.RecursoCriadoEvent;
@@ -41,6 +39,7 @@ import com.carloser7.er7money.api.projection.ResumoLancamento;
 import com.carloser7.er7money.api.repository.LancamentoRepository;
 import com.carloser7.er7money.api.repository.filter.LancamentoFilter;
 import com.carloser7.er7money.api.service.LancamentoService;
+import com.carloser7.er7money.api.storage.S3;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -54,6 +53,9 @@ public class LancamentoResource {
 	
 	@Autowired
 	private LancamentoService lancamentoService;
+	
+	@Autowired
+	private S3 s3;
 	
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and hasAuthority('SCOPE_write')")
@@ -96,16 +98,24 @@ public class LancamentoResource {
 	public void remover(@PathVariable Long codigo) {
 		this.lancamentoRepository.deleteById(codigo);
 	}
+
 	
 	@PostMapping("/anexo")
-	public String uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
-		String dataAtual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyy_HH'h'mm"));
-		
-		FileOutputStream fileOutput = new FileOutputStream("C:\\Users\\Carlos Reis\\Desktop\\ajuste\\anexos\\anexo_" + dataAtual + "_" + anexo.getOriginalFilename());
-		fileOutput.write(anexo.getBytes());
-		fileOutput.close();
-		return "ok";
+	public Anexo uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
+		String nome = this.s3.salvarTemporariamente(anexo);
+		return new Anexo(nome, this.s3.configurarUrl(nome));
 	}
+	
+	// Implementação de uoload local
+	//	@PostMapping("/anexo")
+	//	public String uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
+	//		String dataAtual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyy_HH'h'mm"));
+	//		
+	//		FileOutputStream fileOutput = new FileOutputStream("C:\\Users\\Carlos Reis\\Desktop\\ajuste\\anexos\\anexo_" + dataAtual + "_" + anexo.getOriginalFilename());
+	//		fileOutput.write(anexo.getBytes());
+	//		fileOutput.close();
+	//		return "ok";
+	//	}
 	
 	@GetMapping("/estatistica/por-categoria")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and hasAuthority('SCOPE_read')")

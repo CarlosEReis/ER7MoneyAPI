@@ -93,7 +93,7 @@ public class Er7moneyApiProperty {
 
 		private String accessKeyId;
 		private String secretAccessKey;
-		private String bucketPrefix = "er7money-arquivos";
+		private String bucketPrefix = "cer-er7money-files";
 
 		public String getAccessKeyId() {
 			return accessKeyId;
