@@ -3,33 +3,33 @@ CREATE TABLE estado (
 	nome VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB;
 
-INSERT INTO estado (codigo, nome) VALUES(1, 'Acre');
-INSERT INTO estado (codigo, nome) VALUES(2, 'Alagoas');
-INSERT INTO estado (codigo, nome) VALUES(3, 'Amazonas');
-INSERT INTO estado (codigo, nome) VALUES(4, 'Amapá');
-INSERT INTO estado (codigo, nome) VALUES(5, 'Bahia');
-INSERT INTO estado (codigo, nome) VALUES(6, 'Ceará');
-INSERT INTO estado (codigo, nome) VALUES(7, 'Distrito Federal');
-INSERT INTO estado (codigo, nome) VALUES(8, 'Espírito Santo');
-INSERT INTO estado (codigo, nome) VALUES(9, 'Goiás');
-INSERT INTO estado (codigo, nome) VALUES(10, 'Maranhão');
-INSERT INTO estado (codigo, nome) VALUES(11, 'Minas Gerais');
-INSERT INTO estado (codigo, nome) VALUES(12, 'Mato Grosso do Sul');
-INSERT INTO estado (codigo, nome) VALUES(13, 'Mato Grosso');
-INSERT INTO estado (codigo, nome) VALUES(14, 'Pará');
-INSERT INTO estado (codigo, nome) VALUES(15, 'Paraíba');
-INSERT INTO estado (codigo, nome) VALUES(16, 'Pernambuco');
-INSERT INTO estado (codigo, nome) VALUES(17, 'Piauí');
-INSERT INTO estado (codigo, nome) VALUES(18, 'Paraná');
-INSERT INTO estado (codigo, nome) VALUES(19, 'Rio de Janeiro');
-INSERT INTO estado (codigo, nome) VALUES(20, 'Rio Grande do Norte');
-INSERT INTO estado (codigo, nome) VALUES(21, 'Rondônia');
-INSERT INTO estado (codigo, nome) VALUES(22, 'Roraima');
-INSERT INTO estado (codigo, nome) VALUES(23, 'Rio Grande do Sul');
-INSERT INTO estado (codigo, nome) VALUES(24, 'Santa Catarina');
-INSERT INTO estado (codigo, nome) VALUES(25, 'Sergipe');
-INSERT INTO estado (codigo, nome) VALUES(26, 'São Paulo');
-INSERT INTO estado (codigo, nome) VALUES(27, 'Tocantins');
+INSERT INTO estado (codigo, nome) VALUES(1, 'AC');
+INSERT INTO estado (codigo, nome) VALUES(2, 'AL');
+INSERT INTO estado (codigo, nome) VALUES(3, 'AM');
+INSERT INTO estado (codigo, nome) VALUES(4, 'AP');
+INSERT INTO estado (codigo, nome) VALUES(5, 'BA');
+INSERT INTO estado (codigo, nome) VALUES(6, 'CE');
+INSERT INTO estado (codigo, nome) VALUES(7, 'DF');
+INSERT INTO estado (codigo, nome) VALUES(8, 'ES');
+INSERT INTO estado (codigo, nome) VALUES(9, 'GO');
+INSERT INTO estado (codigo, nome) VALUES(10, 'MA');
+INSERT INTO estado (codigo, nome) VALUES(11, 'MG');
+INSERT INTO estado (codigo, nome) VALUES(12, 'MS');
+INSERT INTO estado (codigo, nome) VALUES(13, 'MT');
+INSERT INTO estado (codigo, nome) VALUES(14, 'PA');
+INSERT INTO estado (codigo, nome) VALUES(15, 'PB');
+INSERT INTO estado (codigo, nome) VALUES(16, 'PE');
+INSERT INTO estado (codigo, nome) VALUES(17, 'PI');
+INSERT INTO estado (codigo, nome) VALUES(18, 'RJ');
+INSERT INTO estado (codigo, nome) VALUES(19, 'RJ');
+INSERT INTO estado (codigo, nome) VALUES(20, 'RN');
+INSERT INTO estado (codigo, nome) VALUES(21, 'RO');
+INSERT INTO estado (codigo, nome) VALUES(22, 'RR');
+INSERT INTO estado (codigo, nome) VALUES(23, 'RS');
+INSERT INTO estado (codigo, nome) VALUES(24, 'SC');
+INSERT INTO estado (codigo, nome) VALUES(25, 'SE');
+INSERT INTO estado (codigo, nome) VALUES(26, 'SP');
+INSERT INTO estado (codigo, nome) VALUES(27, 'TO');
 
 
 
