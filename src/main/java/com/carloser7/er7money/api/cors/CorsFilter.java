@@ -31,8 +31,10 @@ public class CorsFilter implements Filter{
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
+		System.out.println("\n\n"+this.er7moneyApiProperty.getSeguranca().getOrigemPermitida());
 		response.setHeader("Access-Control-Allow-Origin", this.er7moneyApiProperty.getSeguranca().getOrigemPermitida());
 		response.setHeader("Access-Control-Allow-Credentials", "true");
+		
 
 		if ("OPTIONS".equals(request.getMethod()) && this.er7moneyApiProperty.getSeguranca().getOrigemPermitida().equals(request.getHeader("Origin"))) {
 			
