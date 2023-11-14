@@ -26,7 +26,7 @@ public class Er7moneyApiProperty {
 	public static class Seguranca {
 
 		private boolean enableHttps;
-		private String origemPermitida = "http://localhost:8000";;
+		private String origemPermitida;
 
 		public boolean isEnableHttps() {
 			return enableHttps;
