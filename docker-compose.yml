@@ -1,0 +1,40 @@
+networks:
+  er7_lanc-fin:
+    driver: bridge
+
+services:
+  er7_lanc-fin-db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+    networks:
+      - er7_lanc-fin
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 15s
+      retries: 3
+
+  er7_lanc-fin-api:
+    build: .
+    image: er7_lanc-fin-api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: er7_lanc-fin-db
+      DB_USER: root
+      DB_PASS: ""
+      S3_ACCESS_KEY:
+      S3_SECRET_KEY:
+      MAIL_HOST:
+      MAIL_USER:
+      MAIL_PASS:
+      ORIGEM_PERMITIDA: http://localhost:4200
+    networks:
+      - er7_lanc-fin
+    depends_on:
+      er7_lanc-fin-db:
+        condition: service_healthy
